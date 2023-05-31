@@ -1,6 +1,7 @@
 package myslenietak;
 
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 
@@ -15,10 +16,10 @@ public class RecipeController {
     }
 
     @GetMapping
-    List<Recipe> getRecipes(){
-        return recipeService.getRecipes();
+    List<Recipe> getRecipes(@RequestParam(required = false) String ingredients){
+        return recipeService.getRecipes(ingredients);
     }
-    @GetMapping("/{id}")
+    @GetMapping("/getById/{id}")
     Recipe getRecipeById(@PathVariable Long id){
          return recipeService.getRecipesById(id);
     }
