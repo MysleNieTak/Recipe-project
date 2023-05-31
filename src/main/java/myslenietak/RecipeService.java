@@ -1,6 +1,7 @@
 package myslenietak;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -40,6 +41,27 @@ public class RecipeService {
                 .orElseThrow();
         recipeRepository.delete(recipeFromDb);
         return recipeFromDb;
+    }
+
+    Recipe updateRecipe(Long id, Recipe recipe) {
+        Recipe recipeToUpdate = recipeRepository.findById(id)
+                .orElseThrow();
+        if (recipe.getName() != null) {
+            recipeToUpdate.setName(recipe.getName());
+        }
+        if (recipe.getDescription() != null) {
+            recipeToUpdate.setDescription(recipe.getDescription());
+        }
+        if (recipe.getDuration() != null) {
+            recipeToUpdate.setDuration(recipe.getDuration());
+        }
+        if (recipe.getNumberOfPeople() != null) {
+            recipeToUpdate.setNumberOfPeople(recipe.getNumberOfPeople());
+        }
+        if (recipe.getIngredients() != null) {
+            recipeToUpdate.setIngredients(recipe.getIngredients());
+        }
+        return recipeRepository.save(recipeToUpdate);
     }
 
 }

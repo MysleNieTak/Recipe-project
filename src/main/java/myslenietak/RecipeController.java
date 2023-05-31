@@ -36,4 +36,9 @@ public class RecipeController {
         return recipeService.deleteRecipe(id);
     }
 
+    @PatchMapping("/{id}")
+    Recipe updateRecipe(@PathVariable Long id, @RequestBody Recipe recipe){
+         return recipeService.updateRecipe(id, recipe);
+    }
+
 }
