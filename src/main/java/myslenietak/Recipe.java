@@ -1,0 +1,83 @@
+package myslenietak;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+
+@Entity
+public class Recipe {
+    @Id
+    @GeneratedValue
+    Long id;
+
+    public Recipe(String name, String description, Integer duration, Integer numberOfPeople, String ingredients, Complexity complexity) {
+        this.name = name;
+        this.description = description;
+        this.duration = duration;
+        this.numberOfPeople = numberOfPeople;
+        this.ingredients = ingredients;
+        this.complexity = complexity;
+    }
+
+    private String name;
+    private String description;
+    private Integer duration;
+    private Integer numberOfPeople;
+    private String ingredients;
+    private Complexity complexity;
+
+    public Recipe() {
+
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Integer getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Integer duration) {
+        this.duration = duration;
+    }
+
+    public Integer getNumberOfPeople() {
+        return numberOfPeople;
+    }
+
+    public void setNumberOfPeople(Integer numberOfPeople) {
+        this.numberOfPeople = numberOfPeople;
+    }
+
+    public String getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(String ingredients) {
+        this.ingredients = ingredients;
+    }
+
+    public Complexity getComplexity() {
+        return complexity;
+    }
+
+    public void setComplexity(Complexity complexity) {
+        this.complexity = complexity;
+    }
+}
+enum Complexity {
+    EASY, STANDARD, HARD
+}
