@@ -9,11 +9,15 @@ import java.util.Optional;
 public interface RecipeRepository extends JpaRepository<Recipe, Long> {
     List<Recipe> findAllByIngredientsContains(String ingredients);
 
-    /*List<Recipe> findAllByIngredientsContains(String ingredients, Pageable pageable);
+    // List<Recipe> findAllByIngredientsContains(String ingredients, Pageable pageable);
 
-    /*List<Recipe> findAllByComplexity(Complexity complexity, Pageable pageable);
+    List<Recipe> findAllByComplexity(Complexity complexity);
 
-    List<Recipe> findAllByDuration(int duration, Pageable pageable);
+    //List<Recipe> findAllByComplexity(Complexity complexity, Pageable pageable);
 
-    Optional<Recipe> findByName(String name); // SELECT * FROM RECIPE WHERE name = 'name' */
+    List<Recipe> findAllByDuration(int duration);
+
+   // List<Recipe> findAllByDuration(int duration, Pageable pageable);
+
+    // Optional<Recipe> findByName(String name); // SELECT * FROM RECIPE WHERE name = 'name'
 }

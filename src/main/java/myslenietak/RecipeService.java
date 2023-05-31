@@ -13,9 +13,13 @@ public class RecipeService {
         this.recipeRepository = recipeRepository;
     }
 
-    List<Recipe> getRecipes(String ingredients) {
+    List<Recipe> getRecipes(String ingredients, Complexity complexity, Integer duration) {
         if (ingredients != null) {
             return recipeRepository.findAllByIngredientsContains(ingredients);
+        } else if (complexity != null) {
+            return recipeRepository.findAllByComplexity(complexity);
+        } else if (duration != null) {
+            return recipeRepository.findAllByDuration(duration);
         }
         return recipeRepository.findAll();
     }
