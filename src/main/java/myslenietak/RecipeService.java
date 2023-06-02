@@ -5,6 +5,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+
+
 import java.util.List;
 
 @Service
@@ -19,21 +21,21 @@ public class RecipeService {
     List<Recipe> getRecipes(String ingredients,
                             Complexity complexity,
                             Integer duration,
-                            SortType sortType) {
-     Sort.Direction direction = SortType.ASC == sortType ? Sort.Direction.ASC : Sort.Direction.DESC;
-      Sort sort = Sort.by(direction, "name");
- Pageable pageable = PageRequest.of(1,2,sort);
+                            SortType sortType,
+                            Integer page,
+                            Integer size) {
 
- // start range: pages x size, end range: pages x size + size = which elements received
+        Pageable pageable = providePageable(page, size, sortType);
 
         if (ingredients != null) {
-            return recipeRepository.findAllByIngredientsContains(ingredients);
+            return recipeRepository.findAllByIngredientsContains(ingredients, pageable);
         } else if (complexity != null) {
-            return recipeRepository.findAllByComplexity(complexity);
+            return recipeRepository.findAllByComplexity(complexity, pageable);
         } else if (duration != null) {
-            return recipeRepository.findAllByDuration(duration);
+            return recipeRepository.findAllByDuration(duration, pageable);
         }
         return recipeRepository.findAll(pageable).toList();
+
     }
 
     Recipe getRecipesById(Long id) {
@@ -73,6 +75,20 @@ public class RecipeService {
             recipeToUpdate.setIngredients(recipe.getIngredients());
         }
         return recipeRepository.save(recipeToUpdate);
+    }
+
+    Pageable providePageable (Integer page, Integer size, SortType sortType) {
+
+        Sort.Direction direction = SortType.DESC == sortType ? Sort.Direction.DESC : Sort.Direction.ASC;
+        Sort sort = Sort.by(direction, "name");
+
+        // start range: pages x size, end range: pages x size + size = which elements received
+        // if page/sort/page+sort/lack of page&sort service:
+
+        return PageRequest.of(
+                page != null && size != null ? page : 0,
+                page != null && size != null ? size : (int) recipeRepository.count(), sort);
+
     }
 
 }
