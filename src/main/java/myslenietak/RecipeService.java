@@ -1,5 +1,7 @@
 package myslenietak;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +20,11 @@ public class RecipeService {
                             Complexity complexity,
                             Integer duration,
                             SortType sortType) {
-      Sort.Direction direction = SortType.DESC == sortType ? Sort.Direction.DESC : Sort.Direction.ASC;
+     Sort.Direction direction = SortType.ASC == sortType ? Sort.Direction.ASC : Sort.Direction.DESC;
       Sort sort = Sort.by(direction, "name");
+ Pageable pageable = PageRequest.of(1,2,sort);
+
+ // start range: pages x size, end range: pages x size + size = which elements received
 
         if (ingredients != null) {
             return recipeRepository.findAllByIngredientsContains(ingredients);
@@ -28,7 +33,7 @@ public class RecipeService {
         } else if (duration != null) {
             return recipeRepository.findAllByDuration(duration);
         }
-        return recipeRepository.findAll(sort);
+        return recipeRepository.findAll(pageable).toList();
     }
 
     Recipe getRecipesById(Long id) {
