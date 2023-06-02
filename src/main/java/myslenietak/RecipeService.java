@@ -1,7 +1,7 @@
 package myslenietak;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -14,7 +14,13 @@ public class RecipeService {
         this.recipeRepository = recipeRepository;
     }
 
-    List<Recipe> getRecipes(String ingredients, Complexity complexity, Integer duration) {
+    List<Recipe> getRecipes(String ingredients,
+                            Complexity complexity,
+                            Integer duration,
+                            SortType sortType) {
+      Sort.Direction direction = SortType.DESC == sortType ? Sort.Direction.DESC : Sort.Direction.ASC;
+      Sort sort = Sort.by(direction, "name");
+
         if (ingredients != null) {
             return recipeRepository.findAllByIngredientsContains(ingredients);
         } else if (complexity != null) {
@@ -22,7 +28,7 @@ public class RecipeService {
         } else if (duration != null) {
             return recipeRepository.findAllByDuration(duration);
         }
-        return recipeRepository.findAll();
+        return recipeRepository.findAll(sort);
     }
 
     Recipe getRecipesById(Long id) {

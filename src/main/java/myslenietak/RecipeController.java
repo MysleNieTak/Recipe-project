@@ -18,8 +18,10 @@ public class RecipeController {
     @GetMapping
     List<Recipe> getRecipes(@RequestParam(required = false) String ingredients,
                             @RequestParam(required = false) Complexity complexity,
-                            @RequestParam(required = false) Integer duration){
-        return recipeService.getRecipes(ingredients, complexity, duration);
+                            @RequestParam(required = false) Integer duration,
+                            @RequestParam(required = false) SortType sortType)
+       {
+        return recipeService.getRecipes(ingredients, complexity, duration, sortType);
     }
     @GetMapping("/getById/{id}")
     Recipe getRecipeById(@PathVariable Long id){
