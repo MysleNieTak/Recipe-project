@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class RecipeService {
@@ -40,7 +41,7 @@ public class RecipeService {
 
     Recipe getRecipesById(Long id) {
         return recipeRepository.findById(id)
-                .orElseThrow();
+                .orElseThrow(() -> new NoSuchElementException("Can't find recipe with id: "+ id));
     }
 
 
@@ -51,14 +52,14 @@ public class RecipeService {
     Recipe deleteRecipe(Long id) {
         Recipe recipeFromDb = recipeRepository
                 .findById(id)
-                .orElseThrow();
+                .orElseThrow(() -> new NoSuchElementException("Can't find recipe with id: "+ id));
         recipeRepository.delete(recipeFromDb);
         return recipeFromDb;
     }
 
     Recipe updateRecipe(Long id, Recipe recipe) {
         Recipe recipeToUpdate = recipeRepository.findById(id)
-                .orElseThrow();
+                .orElseThrow(() -> new NoSuchElementException("Can't find recipe with id: "+ id));
         if (recipe.getName() != null) {
             recipeToUpdate.setName(recipe.getName());
         }

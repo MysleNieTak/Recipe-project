@@ -1,9 +1,12 @@
 package myslenietak;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RequestMapping("/recipes")
 @RestController
@@ -49,6 +52,11 @@ public class RecipeController {
     @PatchMapping("/{id}")
     Recipe updateRecipe(@PathVariable Long id, @RequestBody Recipe recipe){
          return recipeService.updateRecipe(id, recipe);
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    private ResponseEntity<Object> mapSuchElementException(NoSuchElementException ex){
+         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
 }
