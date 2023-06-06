@@ -55,10 +55,19 @@ public class RecipeController {
     }
 
     @ExceptionHandler(NoSuchElementException.class)
-    private ResponseEntity<Error> mapSuchElementException(NoSuchElementException ex){
+    private ResponseEntity<Error> mapNoSuchElementException(NoSuchElementException ex){
          return new ResponseEntity<>(new Error(HttpStatus.NOT_FOUND.value(),
                  ex.getMessage()
          ), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(RecipeAlreadyExistsException.class)
+    private ResponseEntity<Error> mapRecipeAlreadyExistsException(RecipeAlreadyExistsException ex){
+         return new ResponseEntity<>(
+                 new Error(HttpStatus.BAD_REQUEST.value(), ex.getMessage()),
+                 HttpStatus.BAD_REQUEST
+         );
+
     }
 
 }

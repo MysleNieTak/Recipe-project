@@ -17,5 +17,5 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
     List<Recipe> findAllByDuration(int duration, Pageable pageable);
 
 
-    // Optional<Recipe> findByName(String name); // SELECT * FROM RECIPE WHERE name = 'name'
+    Optional<Recipe> findByName(String name); // SELECT * FROM RECIPE WHERE name = 'name'
 }

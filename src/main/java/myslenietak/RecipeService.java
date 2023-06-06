@@ -6,7 +6,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 
-
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -41,25 +40,31 @@ public class RecipeService {
 
     Recipe getRecipesById(Long id) {
         return recipeRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Can't find recipe with id: "+ id));
+                .orElseThrow(() -> new NoSuchElementException("Can't find recipe with id: " + id));
     }
 
 
     Recipe addRecipe(Recipe recipe) {
+        String recipeName = recipe.getName();
+
+        recipeRepository.findByName(recipeName)
+                .ifPresent(r -> {
+                throw new RecipeAlreadyExistsException(recipeName);
+                });
         return recipeRepository.save(recipe);
-    }
+}
 
     Recipe deleteRecipe(Long id) {
         Recipe recipeFromDb = recipeRepository
                 .findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Can't find recipe with id: "+ id));
+                .orElseThrow(() -> new NoSuchElementException("Can't find recipe with id: " + id));
         recipeRepository.delete(recipeFromDb);
         return recipeFromDb;
     }
 
     Recipe updateRecipe(Long id, Recipe recipe) {
         Recipe recipeToUpdate = recipeRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Can't find recipe with id: "+ id));
+                .orElseThrow(() -> new NoSuchElementException("Can't find recipe with id: " + id));
         if (recipe.getName() != null) {
             recipeToUpdate.setName(recipe.getName());
         }
@@ -78,7 +83,7 @@ public class RecipeService {
         return recipeRepository.save(recipeToUpdate);
     }
 
-    Pageable providePageable (Integer page, Integer size, SortType sortType) {
+    Pageable providePageable(Integer page, Integer size, SortType sortType) {
 
         Sort.Direction direction = SortType.DESC == sortType ? Sort.Direction.DESC : Sort.Direction.ASC;
         Sort sort = Sort.by(direction, "name");
