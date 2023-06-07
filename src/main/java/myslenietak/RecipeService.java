@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 public class RecipeService {
@@ -40,46 +39,52 @@ public class RecipeService {
 
     Recipe getRecipesById(Long id) {
         return recipeRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Can't find recipe with id: " + id));
+                .orElseThrow(() -> new NoRecipeFoundException(id));
     }
 
 
     Recipe addRecipe(Recipe recipe) {
         String recipeName = recipe.getName();
-
-        recipeRepository.findByName(recipeName)
-                .ifPresent(r -> {
-                throw new RecipeAlreadyExistsException(recipeName);
-                });
+        checkIfRecipeNameIsUnique(recipeName);
         return recipeRepository.save(recipe);
-}
+    }
 
     Recipe deleteRecipe(Long id) {
-        Recipe recipeFromDb = recipeRepository
-                .findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Can't find recipe with id: " + id));
+        Recipe recipeFromDb = getRecipesById(id);
         recipeRepository.delete(recipeFromDb);
         return recipeFromDb;
     }
 
     Recipe updateRecipe(Long id, Recipe recipe) {
-        Recipe recipeToUpdate = recipeRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Can't find recipe with id: " + id));
-        if (recipe.getName() != null) {
+        Recipe recipeToUpdate = getRecipesById(id);
+
+        String recipeName = recipe.getName();
+        if (recipeName != null && !recipeName.equals(recipeToUpdate.getName())) {
+            recipeRepository.findByName(recipeName).ifPresent(r -> {
+                throw new RecipeAlreadyExistsException(recipeName);
+            });
             recipeToUpdate.setName(recipe.getName());
         }
-        if (recipe.getDescription() != null) {
-            recipeToUpdate.setDescription(recipe.getDescription());
+
+        String recipeDescription = recipe.getDescription();
+        if (recipeDescription != null && !recipeDescription.equals(recipeToUpdate.getDescription())) {
+            recipeToUpdate.setDescription(recipeDescription);
         }
-        if (recipe.getDuration() != null) {
-            recipeToUpdate.setDuration(recipe.getDuration());
+
+        Integer recipeDuration = recipe.getDuration();
+        if (recipeDuration != null && !recipeDuration.equals(recipeToUpdate.getDuration())) {
+            recipeToUpdate.setDuration(recipeDuration);
         }
-        if (recipe.getNumberOfPeople() != null) {
-            recipeToUpdate.setNumberOfPeople(recipe.getNumberOfPeople());
+
+        Integer recipeNumberOfPeople = recipe.getNumberOfPeople();
+        if (recipeNumberOfPeople != null && !recipeNumberOfPeople.equals(recipeToUpdate.getNumberOfPeople())) {
+            recipeToUpdate.setNumberOfPeople(recipeNumberOfPeople);
         }
-        if (recipe.getIngredients() != null) {
-            recipeToUpdate.setIngredients(recipe.getIngredients());
+        String recipeIngredients = recipe.getIngredients();
+        if (recipeIngredients != null && !recipeIngredients.equals(recipeToUpdate.getIngredients())) {
+            recipeToUpdate.setIngredients(recipeIngredients);
         }
+
         return recipeRepository.save(recipeToUpdate);
     }
 
@@ -96,5 +101,12 @@ public class RecipeService {
                 page != null && size != null ? size : (int) recipeRepository.count(), sort);
 
     }
+
+    private void checkIfRecipeNameIsUnique(String recipeName) {
+        recipeRepository.findByName(recipeName).ifPresent(r -> {
+            throw new RecipeAlreadyExistsException(recipeName);
+        });
+    }
+
 
 }

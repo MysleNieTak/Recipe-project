@@ -54,8 +54,8 @@ public class RecipeController {
          return recipeService.updateRecipe(id, recipe);
     }
 
-    @ExceptionHandler(NoSuchElementException.class)
-    private ResponseEntity<Error> mapNoSuchElementException(NoSuchElementException ex){
+    @ExceptionHandler(NoRecipeFoundException.class)
+    private ResponseEntity<Error> mapNoRecipeFoundException(NoRecipeFoundException ex){
          return new ResponseEntity<>(new Error(HttpStatus.NOT_FOUND.value(),
                  ex.getMessage()
          ), HttpStatus.NOT_FOUND);
