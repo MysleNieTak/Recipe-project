@@ -22,10 +22,22 @@ public class Recipe {
     @NotNull
     @Size(min =2, max = 30)
     private String name;
+
+    @NotBlank
+    @NotNull
+    @Size(min =10, max = 100)
     private String description;
+
+    @NotNull
+    @Min(1)
     private Integer duration;
+
+    @Max(20)
+    @Min(1)
     private Integer numberOfPeople;
     private String ingredients;
+
+    @NotNull
     private Complexity complexity;
 
     public Recipe() {
