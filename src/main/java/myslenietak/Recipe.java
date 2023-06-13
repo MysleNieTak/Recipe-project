@@ -18,26 +18,26 @@ public class Recipe {
         this.ingredients = ingredients;
         this.complexity = complexity;
     }
-    @NotBlank
-    @NotNull
-    @Size(min =2, max = 30)
+    @NotBlank(groups = {AddRecipe.class})
+    @NotNull(groups = AddRecipe.class)
+    @Size(min =2, max = 30, groups = {AddRecipe.class, UpdateRecipe.class})
     private String name;
 
-    @NotBlank
-    @NotNull
-    @Size(min =10, max = 100)
+    @NotBlank(groups = {AddRecipe.class})
+    @NotNull(groups = AddRecipe.class)
+    @Size(min = 10, max = 100, groups = {AddRecipe.class, UpdateRecipe.class})
     private String description;
 
-    @NotNull
-    @Min(1)
+    @NotNull(groups = AddRecipe.class)
+    @Min(value = 1, groups = {AddRecipe.class, UpdateRecipe.class})
     private Integer duration;
 
-    @Max(20)
-    @Min(1)
+    @Max(value = 20, groups = {AddRecipe.class, UpdateRecipe.class})
+    @Min(value = 1, groups = {AddRecipe.class, UpdateRecipe.class})
     private Integer numberOfPeople;
     private String ingredients;
 
-    @NotNull
+    @NotNull(groups = AddRecipe.class)
     private Complexity complexity;
 
     public Recipe() {
@@ -95,3 +95,7 @@ public class Recipe {
 enum Complexity {
     EASY, STANDARD, HARD
 }
+
+interface AddRecipe {}
+
+interface UpdateRecipe {}
