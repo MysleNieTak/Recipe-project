@@ -19,12 +19,12 @@ public class Recipe {
         this.complexity = complexity;
     }
     @NotBlank(groups = {AddRecipe.class})
-    @NotNull(groups = AddRecipe.class)
+    @NullOrNotBlank(groups = {AddRecipe.class, UpdateRecipe.class})
     @Size(min =2, max = 30, groups = {AddRecipe.class, UpdateRecipe.class})
     private String name;
 
     @NotBlank(groups = {AddRecipe.class})
-    @NotNull(groups = AddRecipe.class)
+    @NullOrNotBlank(groups = {AddRecipe.class, UpdateRecipe.class})
     @Size(min = 10, max = 100, groups = {AddRecipe.class, UpdateRecipe.class})
     private String description;
 
